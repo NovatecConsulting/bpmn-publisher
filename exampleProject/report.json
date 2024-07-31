@@ -1,0 +1,7 @@
+
+{
+  "report": {
+    "region": "eu-central-1",
+    "bucket": "blogpostawsbucket"
+  }
+}

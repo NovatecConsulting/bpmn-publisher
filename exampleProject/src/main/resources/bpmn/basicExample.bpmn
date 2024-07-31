@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1cyt9zs" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Web Modeler" exporterVersion="198ac19" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.4.0">
+  <bpmn:message id="Message_00j321b" name="NEW_REPORT" />
+  <bpmn:collaboration id="Collaboration_0u3n87i" name="Basic Example">
+    <bpmn:participant id="Participant_1j5onc6" name="File Validator" processRef="File_handling_process" />
+    <bpmn:participant id="Participant_0kuc20y" name="AWS S3" />
+    <bpmn:messageFlow id="Flow_00se8ej" sourceRef="upload_file" targetRef="Participant_0kuc20y" />
+  </bpmn:collaboration>
+  <bpmn:process id="bpmn-publisher-example" name="Guess Number Process" isExecutable="true">
+    <bpmn:extensionElements>
+      <zeebe:userTaskForm id="UserTaskForm_3jsea2a">{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.4.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "41f4f56"
+  },
+  "schemaVersion": 16,
+  "id": "Form_0657lcp",
+  "components": [
+    {
+      "label": "inputNumber",
+      "type": "number",
+      "layout": {
+        "row": "Row_014s7yr",
+        "columns": null
+      },
+      "id": "Field_0oqus3q",
+      "key": "inputNumber"
+    }
+  ],
+  "type": "default"
+}</zeebe:userTaskForm>
+      <zeebe:userTaskForm id="UserTaskForm_162qbh2">{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.5.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "198ac19"
+  },
+  "schemaVersion": 16,
+  "id": "Form_0zkvbf8",
+  "components": [
+    {
+      "label": "AWS Bucket Region",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0i69cvq",
+        "columns": null
+      },
+      "id": "Field_0dj944z",
+      "key": "bucket_region"
+    },
+    {
+      "label": "Bucket Name",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0wssmhl",
+        "columns": null
+      },
+      "id": "Field_1wcwteh",
+      "key": "bucket_name"
+    }
+  ],
+  "type": "default"
+}</zeebe:userTaskForm>
+    </bpmn:extensionElements>
+    <bpmn:sequenceFlow id="Flow_0xi93as" sourceRef="upload_file" targetRef="file_valid" />
+    <bpmn:sequenceFlow id="Flow_1tykba5" sourceRef="Event_1x8d6oe" targetRef="Activity_1rwerhq" />
+    <bpmn:sequenceFlow id="Flow_1tzbaw9" sourceRef="guess_random_number" targetRef="generate-file" />
+    <bpmn:sequenceFlow id="Flow_0gy4jo6" sourceRef="generate-file" targetRef="upload_file" />
+    <bpmn:sequenceFlow id="Flow_0mwtn88" sourceRef="Activity_1rwerhq" targetRef="guess_random_number" />
+    <bpmn:userTask id="Activity_1rwerhq" name="S3 region and name required">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:UserTaskForm_162qbh2" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1tykba5</bpmn:incoming>
+      <bpmn:outgoing>Flow_0mwtn88</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="file_valid" name="end">
+      <bpmn:incoming>Flow_0xi93as</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="upload_file" name="upload file to S3" zeebe:modelerTemplate="6f60159e-f5f5-49d0-805b-9320aab39ee5" zeebe:modelerTemplateVersion="2" zeebe:modelerTemplateIcon="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iODBweCIgaGVpZ2h0PSI4MHB4IiB2aWV3Qm94PSIwIDAgNjAgNjAiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8dGl0bGU+Q29ubmVjdG9yL0xvZ28vUzM8L3RpdGxlPgogICAgPGcgaWQ9IkNvbm5lY3Rvci9Mb2dvL1MzIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyBpZD0iQ29ubmVjdG9yL0xvZ28vUzMvU3F1YXJlIiBmaWxsPSIjRkZGRkZGIj4KICAgICAgICAgICAgPHJlY3QgaWQ9IlJlY3RhbmdsZSIgeD0iMCIgeT0iMCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjYwIj48L3JlY3Q+CiAgICAgICAgPC9nPgogICAgICAgIDxnIGlkPSJDb25uZWN0b3IvTG9nby9TMy9CdWNrZXQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIuOTk5OTAwLCAxLjk5OTYwMCkiIGZpbGw9IiMwMDAwMDAiPgogICAgICAgICAgICA8cGF0aCBzdHJva2U9ImJsYWNrIiBzdHJva2Utd2lkdGg9IjEuNSIgZD0iTTQ3LjgzNiwzMC44OTMgTDQ4LjIyLDI4LjE4OSBDNTEuNzYxLDMwLjMxIDUxLjgwNywzMS4xODYgNTEuODA2MDEzMiwzMS4yMSBDNTEuOCwzMS4yMTUgNTEuMTk2LDMxLjcxOSA0Ny44MzYsMzAuODkzIEw0Ny44MzYsMzAuODkzIFogTTQ1Ljg5MywzMC4zNTMgQzM5Ljc3MywyOC41MDEgMzEuMjUsMjQuNTkxIDI3LjgwMSwyMi45NjEgQzI3LjgwMSwyMi45NDcgMjcuODA1LDIyLjkzNCAyNy44MDUsMjIuOTIgQzI3LjgwNSwyMS41OTUgMjYuNzI3LDIwLjUxNyAyNS40MDEsMjAuNTE3IEMyNC4wNzcsMjAuNTE3IDIyLjk5OSwyMS41OTUgMjIuOTk5LDIyLjkyIEMyMi45OTksMjQuMjQ1IDI0LjA3NywyNS4zMjMgMjUuNDAxLDI1LjMyMyBDMjUuOTgzLDI1LjMyMyAyNi41MTEsMjUuMTA2IDI2LjkyOCwyNC43NjEgQzMwLjk4NiwyNi42ODIgMzkuNDQzLDMwLjUzNSA0NS42MDgsMzIuMzU1IEw0My4xNyw0OS41NjEgQzQzLjE2Myw0OS42MDggNDMuMTYsNDkuNjU1IDQzLjE2LDQ5LjcwMiBDNDMuMTYsNTEuMjE3IDM2LjQ1Myw1NCAyNS40OTQsNTQgQzE0LjQxOSw1NCA3LjY0MSw1MS4yMTcgNy42NDEsNDkuNzAyIEM3LjY0MSw0OS42NTYgNy42MzgsNDkuNjExIDcuNjMyLDQ5LjU2NiBMMi41MzgsMTIuMzU5IEM2Ljk0NywxNS4zOTQgMTYuNDMsMTcgMjUuNSwxNyBDMzQuNTU2LDE3IDQ0LjAyMywxNS40IDQ4LjQ0MSwxMi4zNzQgTDQ1Ljg5MywzMC4zNTMgWiBNMiw4LjQ3OCBDMi4wNzIsNy4xNjIgOS42MzQsMiAyNS41LDIgQzQxLjM2NCwyIDQ4LjkyNyw3LjE2MSA0OSw4LjQ3OCBMNDksOC45MjcgQzQ4LjEzLDExLjg3OCAzOC4zMywxNSAyNS41LDE1IEMxMi42NDgsMTUgMi44NDMsMTEuODY4IDIsOC45MTMgTDIsOC40NzggWiBNNTEsOC41IEM1MSw1LjAzNSA0MS4wNjYsMCAyNS41LDAgQzkuOTM0LDAgMCw1LjAzNSAwLDguNSBMMC4wOTQsOS4yNTQgTDUuNjQyLDQ5Ljc3OCBDNS43NzUsNTQuMzEgMTcuODYxLDU2IDI1LjQ5NCw1NiBDMzQuOTY2LDU2IDQ1LjAyOSw1My44MjIgNDUuMTU5LDQ5Ljc4MSBMNDcuNTU1LDMyLjg4NCBDNDguODg4LDMzLjIwMyA0OS45ODUsMzMuMzY2IDUwLjg2NiwzMy4zNjYgQzUyLjA0OSwzMy4zNjYgNTIuODQ5LDMzLjA3NyA1My4zMzQsMzIuNDk5IEM1My43MzIsMzIuMDI1IDUzLjg4NCwzMS40NTEgNTMuNzcsMzAuODQgQzUzLjUxMSwyOS40NTYgNTEuODY4LDI3Ljk2NCA0OC41MjIsMjYuMDU1IEw1MC44OTgsOS4yOTMgTDUxLDguNSBaIiBpZD0iUzNfTG9nbyI+PC9wYXRoPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="info.novatec.bpm:aws-s3:1" />
+        <zeebe:ioMapping>
+          <zeebe:input source="{{secrets.AWS_ACCESS_KEY}}" target="authentication.accessKey" />
+          <zeebe:input source="{{secrets.AWS_SECRET_KEY}}" target="authentication.secretKey" />
+          <zeebe:input source="PUT_OBJECT" target="requestDetails.operationType" />
+          <zeebe:input source="=bucket_region" target="requestDetails.region" />
+          <zeebe:input source="=bucket_name" target="requestDetails.bucketName" />
+          <zeebe:input source="=generatedFilePath" target="requestDetails.objectKey" />
+          <zeebe:input source="=generatedFilePath" target="requestDetails.filePath" />
+          <zeebe:input source="=generatedFileContentType" target="requestDetails.contentType" />
+        </zeebe:ioMapping>
+        <zeebe:taskHeaders>
+          <zeebe:header key="resultVariable" value="uploadResult" />
+        </zeebe:taskHeaders>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0gy4jo6</bpmn:incoming>
+      <bpmn:outgoing>Flow_0xi93as</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="generate-file" name="generate number and create File">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="generate-file" retries="0" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1tzbaw9</bpmn:incoming>
+      <bpmn:outgoing>Flow_0gy4jo6</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="guess_random_number" name="guess number">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:UserTaskForm_3jsea2a" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0mwtn88</bpmn:incoming>
+      <bpmn:outgoing>Flow_1tzbaw9</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:startEvent id="Event_1x8d6oe" name="new file available">
+      <bpmn:extensionElements />
+      <bpmn:outgoing>Flow_1tykba5</bpmn:outgoing>
+    </bpmn:startEvent>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0u3n87i">
+      <bpmndi:BPMNShape id="Participant_1j5onc6_di" bpmnElement="Participant_1j5onc6" isHorizontal="true">
+        <dc:Bounds x="160" y="230" width="890" height="210" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1rwerhq_di" bpmnElement="Activity_1rwerhq">
+        <dc:Bounds x="330" y="320" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_00z2dln_di" bpmnElement="file_valid">
+        <dc:Bounds x="972" y="342" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="982" y="385" width="19" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0tbpjwf_di" bpmnElement="upload_file">
+        <dc:Bounds x="820" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ga37gh_di" bpmnElement="generate-file">
+        <dc:Bounds x="660" y="320" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_061kkuw_di" bpmnElement="guess_random_number">
+        <dc:Bounds x="500" y="320" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0awfzu9_di" bpmnElement="Event_1x8d6oe">
+        <dc:Bounds x="232" y="342" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="208" y="385" width="85" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0xi93as_di" bpmnElement="Flow_0xi93as">
+        <di:waypoint x="920" y="360" />
+        <di:waypoint x="972" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1tykba5_di" bpmnElement="Flow_1tykba5">
+        <di:waypoint x="268" y="360" />
+        <di:waypoint x="330" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1tzbaw9_di" bpmnElement="Flow_1tzbaw9">
+        <di:waypoint x="600" y="360" />
+        <di:waypoint x="660" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0gy4jo6_di" bpmnElement="Flow_0gy4jo6">
+        <di:waypoint x="760" y="360" />
+        <di:waypoint x="820" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0mwtn88_di" bpmnElement="Flow_0mwtn88">
+        <di:waypoint x="430" y="360" />
+        <di:waypoint x="500" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Participant_0404fre_di" bpmnElement="Participant_0kuc20y" isHorizontal="true">
+        <dc:Bounds x="160" y="110" width="890" height="60" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_00se8ej_di" bpmnElement="Flow_00se8ej">
+        <di:waypoint x="870" y="320" />
+        <di:waypoint x="870" y="170" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
