@@ -6,7 +6,7 @@
     <bpmn:participant id="Participant_0kuc20y" name="AWS S3" />
     <bpmn:messageFlow id="Flow_00se8ej" sourceRef="upload_file" targetRef="Participant_0kuc20y" />
   </bpmn:collaboration>
-  <bpmn:process id="bpmn-publisher-example" name="Guess Number Process" isExecutable="true">
+  <bpmn:process id="bpmn-publisher-example-with-more-files" name="Guess Number Process" isExecutable="true">
     <bpmn:extensionElements>
       <zeebe:userTaskForm id="UserTaskForm_3jsea2a">{
   "executionPlatform": "Camunda Cloud",

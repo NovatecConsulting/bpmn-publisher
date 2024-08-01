@@ -11,6 +11,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.io.IOException;
 
 
@@ -25,9 +26,26 @@ public class DeploymentWorkerInitializer {
         this.zeebeClient = zeebeClient;
     }
 
-    @MyAnnotation(bpmnFilePath = "bpmn/basicExample.bpmn")
-    public void deployBpmnFile(String bpmnFilePath) {
-        System.out.println("filePath:" + bpmnFilePath);
+    @MyAnnotation(bpmnFilePath = "bpmn/")
+    public void deployAllFiles(String directoryPath) {
+        try {
+            Resource directoryResource = new ClassPathResource(directoryPath);
+            File directory = directoryResource.getFile();
+
+            File[] files = directory.listFiles((dir, name) -> name.endsWith(".bpmn") || name.endsWith(".dmn"));
+            if (files != null) {
+                for (File file : files) {
+                    deployFile(directoryPath + "/" + file.getName());
+                }
+            } else {
+                logger.warn("No BPMN or DMN files found in directory: " + directoryPath);
+            }
+        } catch (IOException e) {
+            logger.error("Failed to access BPMN or DMN files", e);
+        }
+    }
+
+    private void deployFile(String bpmnFilePath) {
         try {
             Resource bpmnFile = new ClassPathResource(bpmnFilePath);
             zeebeClient.newDeployCommand()
@@ -35,10 +53,9 @@ public class DeploymentWorkerInitializer {
                     .send()
                     .join();
 
-            logger.info("Deployment successful");
-
-        } catch(IOException e){
-            logger.error("Failed to deploy BPMN file", e);
+            logger.info("Deployment successful for file: " + bpmnFilePath);
+        } catch (IOException e) {
+            logger.error("Failed to deploy file: " + bpmnFilePath, e);
         }
     }
 }

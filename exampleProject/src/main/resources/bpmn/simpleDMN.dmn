@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/"
+             xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/"
+             xmlns:dc="https://www.omg.org/spec/DMN/20191111/DC/"
+             xmlns:di="https://www.omg.org/spec/DMN/20191111/DI/"
+             id="definitions"
+             name="SimpleDecision"
+             namespace="http://example.com/dmn">
+
+  <decision id="decision" name="Decision">
+    <variable name="result" typeRef="string" />
+    <decisionTable id="decisionTable" hitPolicy="FIRST">
+      <input id="input" label="Input Number">
+        <inputExpression id="inputExpression" typeRef="integer">
+          <text>inputNumber</text>
+        </inputExpression>
+      </input>
+
+      <output id="output" label="Result" name="result" typeRef="string"/>
+
+      <rule id="rule1">
+        <inputEntry id="inputEntry1">
+          <text>&lt; 5</text>
+        </inputEntry>
+        <outputEntry id="outputEntry1">
+          <text>"Low"</text>
+        </outputEntry>
+      </rule>
+      <rule id="rule2">
+        <inputEntry id="inputEntry2">
+          <text>&gt;= 5</text>
+        </inputEntry>
+        <inputEntry id="inputEntry3">
+          <text>&lt;= 10</text>
+        </inputEntry>
+        <outputEntry id="outputEntry2">
+          <text>"Medium"</text>
+        </outputEntry>
+      </rule>
+      <rule id="rule3">
+        <inputEntry id="inputEntry4">
+          <text>&gt; 10</text>
+        </inputEntry>
+        <outputEntry id="outputEntry3">
+          <text>"High"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+</definitions>
